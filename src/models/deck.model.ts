@@ -1,4 +1,6 @@
 import {Entity, model, property} from '@loopback/repository';
+import {DeckTypes} from '../enums/deckTypes.enum';
+import {Card} from './card.model';
 
 @model()
 export class Deck extends Entity {
@@ -13,8 +15,11 @@ export class Deck extends Entity {
   @property({
     type: 'string',
     required: true,
+    jsonSchema: {
+      enum: Object.values(DeckTypes)
+    }
   })
-  type: string;
+  type: DeckTypes;
 
   @property({
     type: 'boolean',
@@ -31,8 +36,9 @@ export class Deck extends Entity {
   @property({
     type: 'array',
     itemType: 'object',
+    required: false,
   })
-  cards?: object[];
+  cards: Card[];
 
 
   constructor(data?: Partial<Deck>) {

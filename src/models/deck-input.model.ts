@@ -1,12 +1,16 @@
 import {Model, model, property} from '@loopback/repository';
+import {DeckTypes} from '../enums/deckTypes.enum';
 
 @model()
 export class DeckInput extends Model {
   @property({
     type: 'string',
     required: true,
+    jsonSchema: {
+      enum: Object.values(DeckTypes)
+    }
   })
-  type: string;
+  type: DeckTypes;
 
   @property({
     type: 'boolean',
