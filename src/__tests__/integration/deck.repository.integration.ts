@@ -9,7 +9,7 @@ describe('DeckRepository (integration)', () => {
   beforeEach(givenEmptyDatabase);
 
   describe('createDeck()', () => {
-    it('creates a deck', async () => {
+    it('Creates a deck', async () => {
       const repository = new DeckRepository(testdb);
       await repository.createDeck({'type': DeckTypes.FULL, 'shuffled': true} as DeckInput);
       const decks = await repository.find();
@@ -18,7 +18,7 @@ describe('DeckRepository (integration)', () => {
   });
 
   describe('findById(id)', () => {
-    it('return the correct deck', async () => {
+    it('Return the correct deck', async () => {
       const deck = await givenDeck({deckId: '1234'});
       const repository = new DeckRepository(testdb);
       const found = await repository.findById('1234');
