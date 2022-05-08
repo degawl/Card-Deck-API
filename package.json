@@ -26,7 +26,7 @@
     "posttest": "npm run lint",
     "test:dev": "lb-mocha --allow-console-logs dist/__tests__/**/*.js && npm run posttest",
     "docker:build": "docker build -t card_deck_api .",
-    "docker:run": "docker run -p 3000:3000 -d card_deck_api",
+    "docker:run": "docker run -it -p 3000:3000 card_deck_api",
     "premigrate": "npm run build",
     "migrate": "node ./dist/migrate",
     "preopenapi-spec": "npm run build",
@@ -40,7 +40,7 @@
     "type": "git",
     "url": ""
   },
-  "author": "devon.gawley <devon.gawley@helmes.ee>",
+  "author": "devon.gawley <devon.gawley@gmail.com>",
   "license": "",
   "files": [
     "README.md",
