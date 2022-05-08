@@ -4,7 +4,7 @@ import {
 } from '@loopback/repository';
 import {
   get,
-  getModelSchemaRef, param, post, put, requestBody,
+  getModelSchemaRef, param, post, requestBody,
   response
 } from '@loopback/rest';
 import {Deck, DeckInput} from '../models';
@@ -67,16 +67,5 @@ export class DeckController {
     @param.query.integer('count', {required: true}) count: number
   ): Promise<Card[]> {
     return this.deckRepository.drawFromDeck(id, count);
-  }
-
-  @put('/decks/{id}')
-  @response(204, {
-    description: 'Deck PUT success',
-  })
-  async replaceById(
-    @param.path.string('id') id: string,
-    @requestBody() deck: Deck,
-  ): Promise<void> {
-    await this.deckRepository.replaceById(id, deck);
   }
 }
