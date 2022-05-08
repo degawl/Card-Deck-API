@@ -1,75 +1,103 @@
-# card_deck_api
-
-This application is generated using [LoopBack 4 CLI](https://loopback.io/doc/en/lb4/Command-line-interface.html) with the
-[initial project layout](https://loopback.io/doc/en/lb4/Loopback-application-layout.html).
-
-## Install dependencies
-
-By default, dependencies were installed when this application was generated.
-Whenever dependencies in `package.json` are changed, run the following command:
-
-```sh
-npm install
-```
-
-To only install resolved dependencies in `package-lock.json`:
-
-```sh
-npm ci
-```
+# Card Deck Api
 
 ## Run the application
 
-```sh
-npm start
-```
-
-You can also run `node .` to skip the build step.
-
-Open http://127.0.0.1:3000 in your browser.
-
-## Rebuild the project
-
-To incrementally build the project:
+In the project root directory, we can use docker compose to create a network
+of the REST API and PostgreSQL database at once.
 
 ```sh
-npm run build
+docker-compose up --build -d
 ```
 
-To force a full build by cleaning up cached artifacts:
+The application will be accessible at
+
+http://localhost:3000/
+
+## Migrate the database
+
+Get the container name of the REST API (It will most likely be the second created one).
 
 ```sh
-npm run rebuild
+docker ps
 ```
 
-## Fix code style and formatting issues
+To migrate the database with our models run this command with the container name
 
 ```sh
-npm run lint
+docker exec [container_name] npm run migrate
 ```
 
-To automatically fix such issues:
+In my case it was "card_deck_api-server-1"
 
 ```sh
-npm run lint:fix
+docker exec card_deck_api-server-1 npm run migrate
 ```
 
-## Other useful commands
+Use the explorer at
+http://localhost:3000/explorer/
+to test the functionality of the API.
 
-- `npm run migrate`: Migrate database schemas for models
-- `npm run openapi-spec`: Generate OpenAPI spec into a file
-- `npm run docker:build`: Build a Docker image for this application
-- `npm run docker:run`: Run this application inside a Docker container
+## Creating a new Deck
 
-## Tests
+Create a new deck at http://localhost:3000/explorer/#/DeckController/DeckController.create
+or use a tool such as Postman to send a POST request to http://localhost:3000/decks with request body with expected schema
 
 ```sh
-npm test
+{
+  "type": "FULL",
+  "shuffled": true
+}
 ```
 
-## What's next
+Type must be either FULL or SHORT.
+The shuffled attribute is a boolean and will determine whether the created cards in the deck will be shuffled or not.
 
-Please check out [LoopBack 4 documentation](https://loopback.io/doc/en/lb4/) to
-understand how you can continue to add features to this application.
+Save the deckId from the response as you can use it in the next endpoints.
 
-[![LoopBack](https://github.com/loopbackio/loopback-next/raw/master/docs/site/imgs/branding/Powered-by-LoopBack-Badge-(blue)-@2x.png)](http://loopback.io/)
+## Open a Deck
+
+To open a deck use http://localhost:3000/explorer/#/DeckController/DeckController.findById or use a tool such as Postman to send a GET request to http://localhost:3000/decks/{deckId}
+
+Use the deckId from the response of the Create a Deck endpoint otherwise there will be no deck with entered deckId found.
+
+## Draw a Card
+
+To draw a card use http://localhost:3000/explorer/#/DeckController/DeckController.drawFromDeckById or use a tool such as Postman to send a GET request to http://localhost:3000/decks/{deckId}/draw?count={count}
+
+Count is a required query paramater that is an integer and must be smaller than the remaining cards in the deck.
+
+Drawing cards will remove them from the deck and adjust the deck's remaining value. It will also return the drawn cards as a response.
+
+```sh
+[
+	{
+		"value": "ACE",
+		"suit": "SPADES",
+		"code": "AS"
+	},
+	{
+		"value": "KING",
+		"suit": "HEARTS",
+		"code": "KH"
+	},
+	{
+		"value": "3",
+		"suit": "HEARTS",
+		"code": "3H"
+	}
+]
+```
+
+## Run tests
+
+To run tests use the container name to run the command
+
+```sh
+docker exec [container_name] npm run test
+```
+
+## Shut down application
+
+```sh
+docker-compose down
+```
