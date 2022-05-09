@@ -1,5 +1,20 @@
 # Card Deck Api
 
+## Getting started
+
+1. [Install Docker Compose](https://docs.docker.com/compose/install/)
+2. Clone this repository
+
+```sh
+git clone https://github.com/degawl/Card-Deck-API.git
+```
+
+3. Change directory to the cloned repository
+
+```sh
+cd Card-Deck-API
+```
+
 ## Run the application
 
 In the project root directory, we can use docker compose to create a network
